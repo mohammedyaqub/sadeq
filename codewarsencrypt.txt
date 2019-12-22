@@ -1,0 +1,56 @@
+/******************************************************************************
+
+                            Online C Compiler.
+                Code, Compile, Run and Debug C program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+//simple incrypt  hello world first letter as ascii and remaning //reverse the letter
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h> 
+char *encrypt_token(char *token) { 
+  int tokenl = strlen(token);
+  if (tokenl) { 
+    // additional 2 chars for digits and 1 for NUL char
+    char *etoken = malloc(strlen(token) + 2 + 1); 
+    int first_ascii = (int)(token[0]);
+
+    if (tokenl == 1) { 
+      sprintf(etoken, "%d", first_ascii); 
+    } 
+    else if (tokenl == 2) {
+      char last = token[tokenl-1];
+      sprintf(etoken, "%d%c", first_ascii, last);
+    }
+    else if (tokenl > 2) {
+      char second = token[1];
+      char last = token[tokenl-1];
+      char *middle  = strndup(&token[2], tokenl-3);
+      sprintf(etoken, "%d%c%s%c", first_ascii, last, middle, second); 
+    }
+    return etoken;
+  }
+  return token;
+}
+
+char *encrypt_this(const char *str)
+{
+  char *sdup = strdup(str);
+  char *res = calloc(1, strlen(str)*2 +1); 
+  char *token = strtok(sdup, " ");
+  
+  while (token!=0) { 
+    const char* etok = encrypt_token(token);
+    strcat(res, etok);
+    if(token = strtok(NULL, " "))//if after current word there is space  
+      strcat(res, " "); //so add space to this 
+  }
+  //printf("out is %s\n", res); 
+  return res;
+}
+int main()
+{
+    char a[20]="hello";
+    printf("%s",encrypt_this(a));
+}
